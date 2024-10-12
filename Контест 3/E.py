@@ -19,4 +19,4 @@ while r - l > 1:
   else:
     r = m
     
-print(r)
+print(l)
