@@ -27,7 +27,7 @@ int main()
   int r = pow(10,7) + 1;
 
   for (int i = 0; i < 100; i++){
-    int m = (l + r) / 2;
+    int m = l + (r - l) / 2;
     if (good(m, k, a))
     {
       l = m;
