@@ -1,4 +1,4 @@
-class MaxHeap:
+class MinHeap:
   def __init__(self):
     self.heap = [0]
     self.size = 0
@@ -38,7 +38,7 @@ class MaxHeap:
     self.shiftDown(1)
     return removed
 
-heap = MaxHeap()
+heap = MinHeap()
 N = int(input())
 lst = list(map(int, input().split()))
 for i in range(N):
