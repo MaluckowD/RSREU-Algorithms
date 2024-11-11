@@ -1,3 +1,4 @@
+import sys
 
 class Node:
   def __init__(self, data):
@@ -8,17 +9,18 @@ class Node:
 class BinarySearchTree:
   def __init__(self):
     self.root = None
+    
   def search(self, key):
-        return self._search(self.root, key)
+    return self._search(self.root, key)
 
   def _search(self, node, key):
-      if node is None:
-          return False
-      if key == node.data:
-          return True
-      if key < node.data:
-          return self._search(node.left, key)
-      return self._search(node.right, key)
+    if node is None:
+        return False
+    if key == node.data:
+        return True
+    if key < node.data:
+        return self._search(node.left, key)
+    return self._search(node.right, key)
 
   def insert(self, key):
     if self.root is None:
@@ -39,39 +41,62 @@ class BinarySearchTree:
         else:
           break
   def delete(self, key):
-        self.root = self._delete(self.root, key)
+    self.root = self._delete(self.root, key)
 
   def _delete(self, node, key):
-      if node is None:
-          return node
-      if key < node.data:
-          node.left = self._delete(node.left, key)
-      elif key > node.data:
-          node.right = self._delete(node.right, key)
-      else:
-          if node.left is None:
-              return node.right
-          elif node.right is None:
-              return node.left
-          max_node = self._max_node(node.left)
-          node.data = max_node.data
-          node.left = self._delete(node.left, max_node.data)
-      return node
+    if node is None:
+        return node
+    if key < node.data:
+        node.left = self._delete(node.left, key)
+    elif key > node.data:
+        node.right = self._delete(node.right, key)
+    else:
+        if node.left is None:
+            return node.right
+        elif node.right is None:
+            return node.left
+        max_node = self._max_node(node.left)
+        node.data = max_node.data
+        node.left = self._delete(node.left, max_node.data)
+    return node
             
-  def height(self):
-    def height_recursion(node):
-      if node is None:
-          return 0
-      return 1 + max(height_recursion(node.left), height_recursion(node.right))
+  def print_tree(self, node, level = 0):
+    if node is None:
+        return
+    level += 1
+    self.print_tree(node.left, level)
+    for i in range(level):
+      print(".", end = "")
     
-    return height_recursion(self.root)
+    print(node.data)
+    self.print_tree(node.right, level)
+    
 
-
+numbers = sys.stdin.readline().split()
 bst = BinarySearchTree()
-numbers = input().split()
-for number in numbers:
-  if number[:3] != "0":
-    bst.insert(int(number))
-  else:
-    break
-print(bst.height()) 
+while numbers:
+  numbers = input().split()
+  if numbers[0] == "ADD":
+    if bst.search(numbers[1]):
+      print("ALREADY")
+    else:
+      bst.insert(numbers[1])
+      print("DONE")
+  elif numbers[0] == "DELETE":
+    if bst.search(numbers[1]):
+      bst.delete(numbers[1])
+      print("DONE")
+    else:
+      print("CANNOT")
+  
+  elif numbers[0] == "SEARCH":
+    if bst.search(numbers[1]):
+      print("YES")
+    else:
+      print("NO")
+  
+  elif numbers[0] == "PRINTTREE":
+    bst.print_tree(bst.root, 0)
+  
+  numbers = sys.stdin.readline().split()
+  
