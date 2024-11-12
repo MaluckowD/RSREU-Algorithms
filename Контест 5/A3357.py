@@ -5,6 +5,7 @@ class Node:
     self.data = data
     self.left = None
     self.right = None
+    
 
 class BinarySearchTree:
   def __init__(self):
@@ -42,6 +43,12 @@ class BinarySearchTree:
           break
   def delete(self, key):
     self.root = self._delete(self.root, key)
+  
+  def _max_node(self, node):
+    current = node
+    while current.right is not None:
+        current = current.right
+    return current
 
   def _delete(self, node, key):
     if node is None:
@@ -65,38 +72,37 @@ class BinarySearchTree:
         return
     level += 1
     self.print_tree(node.left, level)
-    for i in range(level):
+    for i in range(1, level):
       print(".", end = "")
     
     print(node.data)
     self.print_tree(node.right, level)
     
-
-numbers = sys.stdin.readline().split()
+    
 bst = BinarySearchTree()
+numbers = sys.stdin.readline().split()
+
 while numbers:
-  numbers = input().split()
-  if numbers[0] == "ADD":
-    if bst.search(numbers[1]):
-      print("ALREADY")
-    else:
-      bst.insert(numbers[1])
-      print("DONE")
-  elif numbers[0] == "DELETE":
-    if bst.search(numbers[1]):
-      bst.delete(numbers[1])
-      print("DONE")
-    else:
-      print("CANNOT")
-  
-  elif numbers[0] == "SEARCH":
-    if bst.search(numbers[1]):
-      print("YES")
-    else:
-      print("NO")
-  
-  elif numbers[0] == "PRINTTREE":
-    bst.print_tree(bst.root, 0)
-  
-  numbers = sys.stdin.readline().split()
+    #print(numbers)
+    if numbers[0] == "ADD":
+      if bst.search(int(numbers[1])): 
+        print("ALREADY")
+      else:
+        bst.insert(int(numbers[1]))  
+        print("DONE")
+    elif numbers[0] == "DELETE":
+      if bst.search(int(numbers[1])):  
+        bst.delete(int(numbers[1]))  
+        print("DONE")
+      else:
+        print("CANNOT")
+    elif numbers[0] == "SEARCH":
+      if bst.search(int(numbers[1])):  
+        print("YES")
+      else:
+        print("NO")
+    elif numbers[0] == "PRINTTREE":
+      bst.print_tree(bst.root, 0)
+
+    numbers = sys.stdin.readline().split()  
   
