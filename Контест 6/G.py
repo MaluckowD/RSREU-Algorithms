@@ -1,37 +1,32 @@
 
-def dfs(v, parent):
-  global cycle
-  color[v] = 'gray'
-  for w in graph[v]:
-    if w == parent:
-      continue
-    
-    if color[w] == 'white':
-      dfs(w, v)
-    if color[w] == 'gray':
-      cycle = True
-  
-  color[v] = 'black'
-  
-n = int(input())
-w = [] * n
-for i in range(n):
-  w.append(input().split(' '))
+import sys
 
-graph = {i + 1: set() for i in range(n)}
+sys.setrecursionlimit(1000000)
 
-for i in range(n):
-  for j in range(len(w)):
-    if w[i][j] == '1':
-      graph[i+1].add(j + 1)
+def dfs(v, p):
+  visited[v] = True
+  for u in graph[v]:
+    if u != p:
+      if visited[u]:
+        return True  
+      if dfs(u, v):
+        return True 
+  return False
 
-color = ['white'] * (n + 1)
+
+n, m = map(int, input().split())
+
+graph = {i: set() for i in range(1, n + 1)}
+for i in range(m):
+  a, b = map(int, input().split())
+  graph[a].add(b)
+  graph[b].add(a)
+
+
+visited = [False] * (n + 1)
 cycle = False
-for v in range(1, n + 1):
-  if color[v] == 'white':
-    dfs(v)
-    if cycle:
-      print(1)
-      break
+
+if m != n - 1 or dfs(1, -1):
+  print("NO")
 else:
-  print(0)
+  print("YES")
