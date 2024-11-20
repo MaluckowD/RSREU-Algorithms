@@ -1,6 +1,6 @@
 
 def solve(graph, order):
-  in_degree = {node: 0 for node in graph}
+  in_degree = {node: 0 for node in graph} #количество ребер, ведущих в каждую вершину
   for node in graph:
     for neighbor in graph[node]:
       in_degree[neighbor] += 1
