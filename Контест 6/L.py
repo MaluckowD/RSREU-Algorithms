@@ -6,7 +6,6 @@ sys.setrecursionlimit(1000000000)
 
 def dfs(start, parent):
     global find
-
     color[start] = "Grey"
     for v in graph[start]:
         if v == parent:
