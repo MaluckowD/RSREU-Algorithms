@@ -1,29 +1,41 @@
 from collections import deque
 
-def bfs(x, y):
-  queue = deque([[x, 0]])
-  visited = set([x])
-  maximum = max(x, y)
-  while queue:
-    node, length = queue.popleft()
-    if node == y:
-      return length
-    
-    if node in visited:
-      continue
-    if abs(node - y) > 100:
-      continue
-      #return length + (y - node) // 9 + 1
-    
-    visited.add(node)
-    for c in range(10):
-      options = [ node + C,  node - C, node * C]
-      for var in options:
-        if 0 <= var <= maximum + 100 and var not in visited:
-          visited.add(var)
-          queue.append([var, length + 1])
-    
-    return -1
+def solve():
+    n, m = map(int, input().split())
+    edges = []
+    for _ in range(m):
+        u, v, winner = map(int, input().split())
+        if winner == u:
+            edges.append((u, v))
+        else:
+            edges.append((v, u))
 
-x, y = map(int, input().split())
+    graph = {i: [] for i in range(1, n + 1)}
+    in_degree = {i: 0 for i in range(1, n + 1)}
+
+    for u, v in edges:
+        graph[u].append(v)
+        in_degree[v] += 1
+
+    queue = deque([node for node, degree in in_degree.items() if degree == 0])
+    sorted_players = []
+    
+    while queue:
+        if len(queue) > 1:
+            print("NO")
+            return
+        u = queue.popleft()
+        sorted_players.append(u)
+
+        for v in graph[u]:
+            in_degree[v] -= 1
+            if in_degree[v] == 0:
+                queue.append(v)
+
+    if len(sorted_players) == n:
+        print("YES")
+    else:
+        print("NO")  # Cycle detected
+
+solve()
       
