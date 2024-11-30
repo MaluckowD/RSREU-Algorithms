@@ -1,3 +1,4 @@
+
 import heapq
 
 def dijkstra(graph, start):
@@ -23,14 +24,13 @@ def dijkstra(graph, start):
 
 
 N = int(input())
-lst = list(map(int, input().split()))
-M = int(input())
+d, v = map(int, input().split())
+R = int(input())
+
 graph = {i: {} for i in range(1, N + 1)}
 
-for i in range(M):
-  s, f = list(map(int, input().split()))
-  graph[s][f] = lst[s-1]
-  graph[f][s] = lst[f-1]
+for i in range(R):
+  start_village, t_start, end_village, t_end = map(int, input().split())
+  graph[start_village][end_village] = (t_end - t_start)
 
-
-print(dijkstra(graph, 1)[N] if dijkstra(graph, 1)[N] != 2009000999 else -1 )
+print(sum(dijkstra(graph, d)) - 1)
