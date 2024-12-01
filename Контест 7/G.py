@@ -1,26 +1,39 @@
-N, M = map(int, input().split())
-INF = float('inf')
 
-pred = [ [-1] * N for i in range(N)]
-dist = [ [INF] * N for i in range(N)]
+def floyd_warshall(graph, N):
+  dist = [[float('inf')] * N for _ in range(N)]
 
-for i in range(N):
-  dist[i][j] = 0
-
-for j in range(M):
-  a, b, weight = map(int, input().split())
-  if dist[a][b] > weight:
-    diat[a][b] = weight
-    pred[a][b] = a
-
-for k in range(N):
-    for i in range(N):
+  for i in range(N):
       for j in range(N):
-        if dist[i][k] != INF and dist[k][j] != INF and dist[i][j] > dist[i][k] + dist[k][j]:
-          dist[i][j] = dist[i][k] + dist[k][j]
-          pred[i][j] = pred[k][j]
+          if graph[i][j] != -1:
+              dist[i][j] = graph[i][j]
+          if i == j:
+              dist[i][j] = 0
+
+  for k in range(N):
+      for i in range(N):
+          for j in range(N):
+              dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+
+
+  for i in range(N):
+      if dist[i][i] < 0:
+          return -1  
+
+  min_path = float('inf')
+  for i in range(N):
+      for j in range(N):
+          if i != j:  
+              min_path = min(min_path, dist[i][j])
+
+  return min_path
+
 
 N = int(input())
-graph = list(list(map(int, input().split())) for _ in range(n))
+graph = []
+for i in range(N):
+  graph.append(list(map(int, input().split())))
+
+result = floyd_warshall(graph, N)
+print(result)
 
         
