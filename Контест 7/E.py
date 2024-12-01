@@ -1,36 +1,38 @@
-
 import heapq
 
-def dijkstra(graph, start):
-  dist = {node: 2009000999 for node in graph}
-  dist[start] = 0
-  
-  pq = [ (0, start)]
-  heapq.heapify(pq)
-  
-  while pq:
-    cur_dist, cur_vertex = heapq.heappop(pq)
-    
-    if dist[cur_vertex] < cur_dist:
-      continue
-    
-    for neighbor, weight in graph[cur_vertex].items():
-      d = cur_dist + weight
-      if d < dist[neighbor]:
-        dist[neighbor] = d
-        heapq.heappush(pq, (d, neighbor))
-  
-  return dist
+
+def dijkstra(graph, start, end):
+    INF = float('inf')
+    pq = []
+
+    dist = {node: INF for node in graph}
+    dist[start] = 0
+
+    heapq.heappush(pq, (0, start))
+
+    while pq:
+        cur_time, cur_vertex = heapq.heappop(pq)
+
+        if cur_time > dist[cur_vertex]:
+            continue
+
+        for dep_time, arr_time, neighbor in graph[cur_vertex]:
+            if dep_time >= cur_time:
+                if arr_time < dist[neighbor]:
+                    dist[neighbor] = arr_time
+                    heapq.heappush(pq, (arr_time, neighbor))
+
+    return dist[end] if dist[end] != INF else -1
 
 
-N = int(input())
+n = int(input())
 d, v = map(int, input().split())
-R = int(input())
+r = int(input())
 
-graph = {i: {} for i in range(1, N + 1)}
+graph = {i: [] for i in range(1, n + 1)}
+for i in range(r):
+    start, time_start, end, time_end = map(int, input().split())
+    graph[start].append((time_start, time_end, end))
 
-for i in range(R):
-  start_village, t_start, end_village, t_end = map(int, input().split())
-  graph[start_village][end_village] = (t_end - t_start)
-
-print(sum(dijkstra(graph, d)) - 1)
+result = dijkstra(graph, d, v)
+print(result)
